@@ -4,32 +4,25 @@ import javafx.scene.Node;
 
 public class Board
     {
-        private int boardWidth;
-        private int boardHeight;
+        private final int boardWidth;
+        private final int boardHeight;
         private int[][] board;
+        private int startingValue;
         
-        public Board (int boardHeight, int boardWidth)
+        public Board (int boardHeight, int boardWidth, int startingValue)
             {
                 this.boardHeight = boardHeight;
                 this.boardWidth = boardWidth;
+                this.startingValue = startingValue;
                 board = new int[boardHeight][boardWidth];
+                generateNewTile();
+                generateNewTile();
             }
         
-        public Board (int[][] board)
-            {
-                this.board = board;
-                boardHeight = board.length;
-                boardWidth = board[0].length;
-            }
         
         public int[][] getBoard ()
             {
                 return board;
-            }
-        
-        public void setBoard (int[][] board)
-            {
-                this.board = board;
             }
         
         public int getBoardWidth ()
@@ -37,20 +30,12 @@ public class Board
                 return boardWidth;
             }
         
-        public void setBoardWidth (int boardWidth)
-            {
-                this.boardWidth = boardWidth;
-            }
         
         public int getBoardHeight ()
             {
                 return boardHeight;
             }
         
-        public void setBoardHeight (int boardHeight)
-            {
-                this.boardHeight = boardHeight;
-            }
         
         public String toString ()
             {
@@ -69,7 +54,7 @@ public class Board
         public boolean moveUp ()
             {
                 boolean hasMoved = false;
-                for (int i = 0; i < boardHeight; i++)
+                for (int i = 1; i < boardHeight; i++)
                     {
                         for (int j = 0; j < boardWidth; j++)
                             {
@@ -133,7 +118,7 @@ public class Board
                 boolean hasMoved = false;
                 for (int i = 0; i < boardHeight; i++)
                     {
-                        for (int j = 0; j < boardWidth; j++)
+                        for (int j = 1; j < boardWidth; j++)
                             {
                                 if (board[i][j] == 0)
                                     {
@@ -213,6 +198,43 @@ public class Board
                         this.generateNewTile();
                     }
             }
+        
+        public boolean checkGameOver ()
+            {
+                for (int i = 0; i < boardHeight; i++)
+                    {
+                        for (int j = 0; j < boardWidth; j++)
+                            {
+                                if (board[i][j] == 0)
+                                    {
+                                        return false;
+                                    }
+                                if (i > 0 && board[i][j] == board[i - 1][j])
+                                    {
+                                        return false;
+                                    }
+                                if (i < boardHeight - 1 && board[i][j] == board[i + 1][j])
+                                    {
+                                        return false;
+                                    }
+                                if (j > 0 && board[i][j] == board[i][j - 1])
+                                    {
+                                        return false;
+                                    }
+                                if (j < boardWidth - 1 && board[i][j] == board[i][j + 1])
+                                    {
+                                        return false;
+                                    }
+                            }
+                    }
+                return true;
+            }
+        
+        public Board reset ()
+            {
+                return new Board(boardHeight, boardWidth, startingValue);
+            }
+        
         public void generateNewTile ()
             {
                 int i = (int) (Math.random() * boardHeight);
@@ -222,6 +244,14 @@ public class Board
                         i = (int) (Math.random() * boardHeight);
                         j = (int) (Math.random() * boardWidth);
                     }
-                board[i][j] = 2;
+                if (Math.random() < 0.9)
+                    {
+                        board[i][j] = startingValue;
+                    }
+                else
+                    {
+                        board[i][j] = startingValue * 2;
+                    }
+                board[i][j] = startingValue;
             }
     }

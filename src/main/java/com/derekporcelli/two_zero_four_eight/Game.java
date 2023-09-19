@@ -14,9 +14,7 @@ public class Game
             {
                 this.boardHeight = boardHeight;
                 this.boardWidth = boardWidth;
-                board = new Board(boardHeight, boardWidth);
-                board.generateNewTile();
-                board.generateNewTile();
+                board = new Board(boardHeight, boardWidth, 2);
             }
         
         public Board getBoard ()
@@ -76,6 +74,7 @@ public class Game
         public void gameLoop () throws IOException
             {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                System.out.println("Welcome to 2048!");
                 while (true)
                     {
                         System.out.println(board.toString());
@@ -87,6 +86,7 @@ public class Game
                                 case "s" -> moveDown();
                                 case "a" -> moveLeft();
                                 case "d" -> moveRight();
+                                case "r" -> board.reset();
                                 default -> System.out.println("Invalid move.");
                             }
                     }
